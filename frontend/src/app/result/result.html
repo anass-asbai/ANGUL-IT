@@ -1,1 +1,16 @@
-<p>result works!</p>
+<main class="result-container page-shell">
+	<div class="result-frame">
+		<div class="result-orbit" aria-hidden="true"><span>&#10003;</span></div>
+		<p class="eyebrow">Verification complete</p>
+		<h1>You're confirmed.</h1>
+		<p class="result-intro">All three checkpoints are clear. Thanks for taking the time to prove there is a person on the other side.</p>
+
+		<section class="summary-box" aria-label="Verification summary">
+			<div><span class="summary-label">Session result</span><strong>Human verified</strong></div>
+			<div><span class="summary-label">Performance</span><strong>{{ stateService.getSummary() }}</strong></div>
+		</section>
+
+		<button class="primary-btn" type="button" (click)="onRestart()">Run another challenge <span aria-hidden="true">&#8594;</span></button>
+		<a class="return-link" routerLink="/">Return to home</a>
+	</div>
+</main>

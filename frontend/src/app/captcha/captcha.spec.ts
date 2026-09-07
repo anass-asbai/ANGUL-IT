@@ -1,16 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Captcha } from './captcha';
+import { CaptchaComponent } from './captcha';
+import { provideRouter } from '@angular/router';
 
 describe('Captcha', () => {
-  let component: Captcha;
-  let fixture: ComponentFixture<Captcha>;
+  let component: CaptchaComponent;
+  let fixture: ComponentFixture<CaptchaComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Captcha],
+      imports: [CaptchaComponent],
+      providers: [provideRouter([])],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(Captcha);
+    fixture = TestBed.createComponent(CaptchaComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
