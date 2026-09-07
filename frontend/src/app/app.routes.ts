@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './home/home';
 import { Captcha } from './captcha/captcha';
-import { Result } from './result/result';
+import { ResultComponent  } from './result/result';
 
 export const routes: Routes = [
   { 
@@ -16,7 +16,7 @@ export const routes: Routes = [
   },
   { 
     path: 'results', 
-    component: Result,
+    component: ResultComponent,
     title: 'Angul-It | Success'
   },
   { 

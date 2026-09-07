@@ -4,17 +4,13 @@ import { Injectable, signal, effect } from '@angular/core';
   providedIn: 'root'
 })
 export class CaptchaStateService {
-  // 1. Define Signals for reactive state
   currentStage = signal<number>(1);
   completedStages = signal<number[]>([]);
   isVerified = signal<boolean>(false);
 
   constructor() {
-    // 2. Load existing state on initialization
     this.loadState();
     
-    // 3. effect() automatically runs and updates localStorage 
-    // anytime one of these signals changes.
     effect(() => {
       const state = {
         currentStage: this.currentStage(),

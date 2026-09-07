@@ -1,1 +1,30 @@
-<p>captcha works!</p>
+<main class="captcha-container">
+      <div class="card">
+        <!-- Stage Progress Header -->
+        <header class="captcha-header">
+          <h2>Stage {{ currentStageId }}</h2>
+          <p>Complete the challenge below to verify you are human.</p>
+        </header>
+
+        <!-- CAPTCHA Challenge Workspace (Add your custom challenge components/logic here) -->
+        <div class="challenge-workspace">
+          <p class="placeholder-text">[ CAPTCHA Challenge UI Goes Here ]</p>
+        </div>
+
+        <!-- Navigation & Actions -->
+        <footer class="action-bar">
+          <button 
+            class="btn secondary" 
+            (click)="onPrevious()" 
+            [disabled]="currentStageId === 1">
+            Previous
+          </button>
+
+          <button 
+            class="btn primary" 
+            (click)="onNext()">
+            Submit & Next
+          </button>
+        </footer>
+      </div>
+    </main>
