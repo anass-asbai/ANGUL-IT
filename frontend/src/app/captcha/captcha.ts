@@ -31,15 +31,13 @@ export class CaptchaComponent {
   mathInput: number | null = null;
   mathQuestion = { a: Math.floor(Math.random() * 20) + 1, b: Math.floor(Math.random() * 20) + 1 };
   
-  // Stage 2 State (Cat Selection) - initialized with a random tile grid
-  tiles = signal<ImageTile[]>(this.generateRandomTiles());
+  tiles = signal<ImageTile[]>([]);
 
-  // Generates a dynamic random grid of 6 tiles with 2–4 cats and random non-cats
   private generateRandomTiles(): ImageTile[] {
     const catEmojis = ['🐱', '🐈', '😺', '😸', '😻'];
     const nonCatEmojis = ['🐶', '🚗', '🍎', '🐰', '🍔', '🚀', '⚽', '🍕', '🌲', '🐼', '🦊', '🍩', '🛸', '🍉', '🚲'];
 
-    const numCats = Math.floor(Math.random() * 3) + 2; // Pick 2, 3, or 4 cats
+    const numCats = Math.floor(Math.random() * 3) + 2; 
     const numNonCats = 6 - numCats;
 
     const catItems = Array.from({ length: numCats }, () => ({
@@ -53,7 +51,7 @@ export class CaptchaComponent {
     }));
 
     return [...catItems, ...nonCatItems]
-      .sort(() => Math.random() - 0.5) // Shuffle
+      .sort(() => Math.random() - 0.5) 
       .map((item, index) => ({
         id: index + 1,
         label: item.label,

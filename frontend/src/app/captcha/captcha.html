@@ -1,14 +1,16 @@
 <main class="captcha-container page-shell">
   <div class="challenge-frame">
     <header class="challenge-topbar">
-      <a class="brand" routerLink="/" aria-label="Return to Angul-It home"><span class="brand-mark" aria-hidden="true">A</span><span>Angul-It</span></a>
+      <a class="brand" routerLink="/" aria-label="Return to Angul-It home"><span class="brand-mark"
+          aria-hidden="true">A</span><span>Angul-It</span></a>
       <span class="session-label">Verification session <span class="status-dot"></span></span>
     </header>
 
     <div class="progress-row" aria-label="Challenge progress">
       <span>Stage {{ currentStageId }} of {{ maxStages }}</span>
       <div class="progress-track"><span [style.width.%]="(currentStageId / maxStages) * 100"></span></div>
-      <span>{{ stateService.numberOfErrors() }} {{ stateService.numberOfErrors() === 1 ? 'mistake' : 'mistakes' }}</span>
+      <span>{{ stateService.numberOfErrors() }} {{ stateService.numberOfErrors() === 1 ? 'mistake' : 'mistakes'
+        }}</span>
     </div>
 
     <section class="challenge-card" aria-labelledby="challenge-title">
@@ -20,9 +22,11 @@
       @if(currentStageId === 1){
       <div class="challenge-box math-box">
         <span class="challenge-label">Solve the equation</span>
-        <p class="math-question"><strong>{{ mathQuestion.a }}</strong> <span>+</span> <strong>{{ mathQuestion.b }}</strong> <span>=</span> <strong>?</strong></p>
+        <p class="math-question"><strong>{{ mathQuestion.a }}</strong> <span>+</span> <strong>{{ mathQuestion.b
+            }}</strong> <span>=</span> <strong>?</strong></p>
         <label class="sr-only" for="math-answer">Your answer</label>
-        <input id="math-answer" type="number" [(ngModel)]="mathInput" placeholder="Enter answer" class="input-field" aria-describedby="math-help" />
+        <input id="math-answer" type="number" [(ngModel)]="mathInput" placeholder="Enter answer" class="input-field"
+          aria-describedby="math-help" />
         <span id="math-help" class="field-hint">Use the whole number, no decimals.</span>
       </div>
       }
@@ -30,10 +34,13 @@
       <div class="challenge-box">
         <span class="challenge-label">{{ getStageDescription() }}</span>
         <div class="grid-container">
-          <button *ngFor="let tile of tiles()" type="button" class="tile" [class.selected]="tile.selected" [attr.aria-pressed]="tile.selected" [attr.aria-label]="'Tile ' + tile.id + (tile.selected ? ', selected' : '')" (click)="toggleTile(tile.id)">
+          @for (tile of tiles(); track tile.id) {
+          <button type="button" class="tile" [class.selected]="tile.selected" [attr.aria-pressed]="tile.selected"
+            [attr.aria-label]="'Tile ' + tile.id + (tile.selected ? ', selected' : '')" (click)="toggleTile(tile.id)">
             <span aria-hidden="true">{{ tile.label }}</span>
             <span class="tile-check" aria-hidden="true">&#10003;</span>
           </button>
+          }
         </div>
       </div>
       }
@@ -42,17 +49,21 @@
         <span class="challenge-label">Enter the code exactly as shown</span>
         <div class="captcha-code-display" aria-label="Verification code">{{ targetCode }}</div>
         <label class="sr-only" for="text-answer">Verification code</label>
-        <input id="text-answer" type="text" [(ngModel)]="textInput" placeholder="Type the code above" class="input-field" autocomplete="off" autocapitalize="characters" />
+        <input id="text-answer" type="text" [(ngModel)]="textInput" placeholder="Type the code above"
+          class="input-field" autocomplete="off" autocapitalize="characters" />
       </div>
       }
       @if(errorMessage()){
       <div class="error-banner" role="alert">{{ errorMessage() }}</div>
       }
       <footer class="action-bar">
-        <button class="btn secondary" type="button" (click)="onPrevious()" [disabled]="currentStageId === 1"><span aria-hidden="true">&#8592;</span> Previous</button>
-        <button class="btn primary" type="button" (click)="onNext()">{{ currentStageId === maxStages ? 'Finish verification' : 'Next stage' }} <span aria-hidden="true">&#8594;</span></button>
+        <button class="btn secondary" type="button" (click)="onPrevious()" [disabled]="currentStageId === 1"><span
+            aria-hidden="true">&#8592;</span> Previous</button>
+        <button class="btn primary" type="button" (click)="onNext()">{{ currentStageId === maxStages ? 'Finish
+          verification' : 'Next stage' }} <span aria-hidden="true">&#8594;</span></button>
       </footer>
     </section>
-    <p class="security-note"><span aria-hidden="true">&#9670;</span> Your answers stay in this browser and are never sent anywhere.</p>
+    <p class="security-note"><span aria-hidden="true">&#9670;</span> Your answers stay in this browser and are never
+      sent anywhere.</p>
   </div>
 </main>
