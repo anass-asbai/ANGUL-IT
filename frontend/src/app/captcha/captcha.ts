@@ -29,25 +29,63 @@ export class CaptchaComponent {
 
   // Stage 1 State
   mathInput: number | null = null;
+  mathQuestion = { a: Math.floor(Math.random() * 20) + 1, b: Math.floor(Math.random() * 20) + 1 };
+  
+  // Stage 2 State (Cat Selection) - initialized with a random tile grid
+  tiles = signal<ImageTile[]>(this.generateRandomTiles());
 
-  // Stage 2 State (Cat Selection)
-  tiles = signal<ImageTile[]>([
-    { id: 1, label: '🐱', isCat: true, selected: false },
-    { id: 2, label: '🐶', isCat: false, selected: false },
-    { id: 3, label: '🚗', isCat: false, selected: false },
-    { id: 4, label: '🐱', isCat: true, selected: false },
-    { id: 5, label: '🍎', isCat: false, selected: false },
-    { id: 6, label: '🐱', isCat: true, selected: false },
-  ]);
+  // Generates a dynamic random grid of 6 tiles with 2–4 cats and random non-cats
+  private generateRandomTiles(): ImageTile[] {
+    const catEmojis = ['🐱', '🐈', '😺', '😸', '😻'];
+    const nonCatEmojis = ['🐶', '🚗', '🍎', '🐰', '🍔', '🚀', '⚽', '🍕', '🌲', '🐼', '🦊', '🍩', '🛸', '🍉', '🚲'];
 
-  // Stage 3 State
-  targetCode = 'ANGUL22';
+    const numCats = Math.floor(Math.random() * 3) + 2; // Pick 2, 3, or 4 cats
+    const numNonCats = 6 - numCats;
+
+    const catItems = Array.from({ length: numCats }, () => ({
+      label: catEmojis[Math.floor(Math.random() * catEmojis.length)],
+      isCat: true
+    }));
+
+    const nonCatItems = Array.from({ length: numNonCats }, () => ({
+      label: nonCatEmojis[Math.floor(Math.random() * nonCatEmojis.length)],
+      isCat: false
+    }));
+
+    return [...catItems, ...nonCatItems]
+      .sort(() => Math.random() - 0.5) // Shuffle
+      .map((item, index) => ({
+        id: index + 1,
+        label: item.label,
+        isCat: item.isCat,
+        selected: false
+      }));
+  }
+
+  generateCaptchaCode(length: number = 6): string {
+    const characters = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
+    let targetCode = '';
+
+    for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      targetCode += characters[randomIndex];
+    }
+
+    return targetCode;
+  }
+  
+  targetCode = this.generateCaptchaCode();
   textInput = '';
 
   constructor() {
     this.route.params.subscribe(params => {
       this.currentStageId = Number(params['id']) || 1;
       this.errorMessage.set(null);
+
+      // Regenerate random tiles every time Stage 2 is loaded
+      if (this.currentStageId === 2) {
+        this.tiles.set(this.generateRandomTiles());
+      }
     });
   }
 
@@ -79,7 +117,7 @@ export class CaptchaComponent {
     this.errorMessage.set(null);
 
     if (this.currentStageId === 1) {
-      if (this.mathInput !== 27) {
+      if (this.mathInput !== this.mathQuestion.a + this.mathQuestion.b) {
         this.stateService.recordError();
         this.errorMessage.set('Incorrect math answer. Try again.');
         return false;
@@ -91,12 +129,14 @@ export class CaptchaComponent {
       if (failed) {
         this.stateService.recordError();
         this.errorMessage.set('Incorrect tile selection. Select all cat tiles.');
+        // Generate new random tiles on failure
+        this.tiles.set(this.generateRandomTiles());
         return false;
       }
     }
 
     if (this.currentStageId === 3) {
-      if (this.textInput.trim().toUpperCase() !== this.targetCode) {
+      if (this.textInput !== this.targetCode) {
         this.stateService.recordError();
         this.errorMessage.set('Verification code does not match.');
         return false;
